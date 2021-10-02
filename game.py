@@ -5,8 +5,7 @@ from random import randint
 
 class GipGame:
     def __init__(self):  # init the game with required variables
-        """self.player1 = Player() # create player 1
-        self.player2 = Player() # create player 2"""
+
         self.players = [Player(), Player()]  # list of players
         self.dice = Dice()  # create a dice object
         self.round_score = 0  # declaring round score variable
@@ -17,11 +16,10 @@ class GipGame:
         resets the rounds score and requests
         names for the new players
         """
-        # self.players.index(player) + 1
-        for player in self.players:  # loop through the players
-            player = Player()  # re create the players
-            player.set_name(input(f"Player name \n: "))  # request each players name
-
+        for player in range(len(self.players)):  # loop through the players
+            self.players[player] = Player()  # re create the players
+            self.players[player].set_name(input(f"Player {player+1} name \n: ").capitalize())
+            
         self.reset_round_score()
 
     def play_again(self):
@@ -29,8 +27,8 @@ class GipGame:
         resets the scores of every player
         and the rounds score
         """
-        for player in self.players:  # loop through the players
-            player.reset_score()  # set the players score to 0
+        for player in range(len(self.players)):  # loop through the players
+            self.players[player].reset_score()  # set the players score to 0
 
         self.reset_round_score()
 
