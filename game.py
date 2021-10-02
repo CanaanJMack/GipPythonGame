@@ -32,6 +32,8 @@ class GipGame:
 
         self.reset_round_score()
 
+        self.main_loop()
+
     def is_winner(self):
         """
         loops through all the players
@@ -58,7 +60,7 @@ class GipGame:
         else:
             return False
 
-    def roll_again_request(self):
+    def roll_again_request(self, player):
         """
         Ask if the player wants to roll again
         checks for input string of "y" or "n"
@@ -66,11 +68,11 @@ class GipGame:
         """
         player_input = ""
         while player_input not in ["y", "n"]:  # list of legal characters
-            player_input = input("Roll Again Y/N\n: ").lower()  # request input
+            player_input = input(f"{player}, roll Again? Y/N\n: ").lower()  # request input
 
         return True if player_input == "y" else False  # return true if the player wants to roll again
 
-    def player_roll(self):
+    def player_roll(self, player):
         """
         this function handles rolling the dice for the player
         first assigns a roll to a variable
@@ -78,6 +80,8 @@ class GipGame:
         else appends variable for roll to round score return True
         """
         dice_value = self.dice.roll()
+
+        print(f"[{player.get_score()}]")
         print(f"you rolled a {dice_value}")
         if self.is_bust(dice_value):
             print("You hit a 1 unlucky round score 0")
@@ -88,15 +92,15 @@ class GipGame:
             print(f"now your score for this round is {self.round_score}")
             return True
 
-    def play_round(self):
+    def play_round(self, player):
         """
         handles the basic flow of each round
         and returns the score for that round
         """
-        if self.player_roll():
+        if self.player_roll(player):
             while True:
-                if self.roll_again_request():
-                    if self.player_roll():
+                if self.roll_again_request(player):
+                    if self.player_roll(player):
                         continue
                     else:
                         return self.round_score
@@ -109,15 +113,22 @@ class GipGame:
         self.reset()
         player_turn = randint(0, 1)
         current_player = self.players[player_turn]
+        player_input = ""
 
         while not self.is_winner():
             player_turn = abs(player_turn - 1)
             current_player = self.players[player_turn]
             print(f"______________{current_player.get_name()}'s Turn______________")
-            self.players[player_turn].add_score(self.play_round())
+            self.players[player_turn].add_score(self.play_round(current_player))
             self.reset_round_score()
             print(f"______________{current_player.get_name()}'s Score is {current_player.get_score()}")
 
+        print(f"THE WINNER IS {current_player.get_name().upper()}!!! WITH A SCORE OF {current_player.get_score()}")
+        print(f"{self.players[abs(player_turn - 1)].get_name()} had a score of {self.players[abs(player_turn - 1)].get_score()}")
+
+        while player_input not in ["y", "n"]:
+            player_input = input("Play again? Y/N\n: ").lower()
+        self.play_again() if player_input == "y" else quit()
 
 game = GipGame()
 game.main_loop()

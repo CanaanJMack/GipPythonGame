@@ -7,7 +7,3 @@ class Dice:
     
     def roll(self):
         return randint(self._min, self._sides)
-
-"""if name == "__main__":
-    dice = Dice()
-    print(dice.roll())"""

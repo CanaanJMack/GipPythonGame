@@ -4,7 +4,7 @@ class Player:
         self._name = ""
 
     def __str__(self):
-        return f"{self._name} : {self._score}"
+        return f"{self._name}"
 
     def reset_score(self):
         self.set_score(0)
