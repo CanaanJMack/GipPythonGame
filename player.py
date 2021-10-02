@@ -1,10 +1,10 @@
 class Player:
     def __init__(self):
         self._score = 0
-        self._name = "AAAAAA"
+        self._name = ""
 
     def __str__(self):
-        return f"{self._name} score = {self._score}"
+        return f"{self._name} : {self._score}"
 
     def reset_score(self):
         self.set_score(0)
