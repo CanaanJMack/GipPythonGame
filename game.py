@@ -2,13 +2,14 @@ from player import Player
 from dice import Dice
 from random import randint
 
+
 class GipGame:
-    def __init__(self): # init the game with required variables
+    def __init__(self):  # init the game with required variables
         """self.player1 = Player() # create player 1
         self.player2 = Player() # create player 2"""
-        self.players = [Player(), Player()] # list of players
-        self.dice = Dice() # create a dice object
-        self.round_score = 0 # declaring round score variable
+        self.players = [Player(), Player()]  # list of players
+        self.dice = Dice()  # create a dice object
+        self.round_score = 0  # declaring round score variable
 
     def reset(self):
         """
@@ -17,9 +18,9 @@ class GipGame:
         names for the new players
         """
         # self.players.index(player) + 1
-        for player in self.players: # loop through the players
-            player = Player() # re create the players
-            player.set_name(input(f"Player name \n: ")) # request each players name
+        for player in self.players:  # loop through the players
+            player = Player()  # re create the players
+            player.set_name(input(f"Player name \n: "))  # request each players name
 
         self.reset_round_score()
 
@@ -28,8 +29,8 @@ class GipGame:
         resets the scores of every player
         and the rounds score
         """
-        for player in self.players: # loop through the players
-            player.reset_score() # set the players score to 0
+        for player in self.players:  # loop through the players
+            player.reset_score()  # set the players score to 0
 
         self.reset_round_score()
 
@@ -38,8 +39,8 @@ class GipGame:
         loops through all the players
         and checks for a winner
         """
-        for player in self.players: # loop through the players
-            if player.get_score() >= 100: # check if the player has won
+        for player in self.players:  # loop through the players
+            if player.get_score() >= 100:  # check if the player has won
                 return True
         return False
 
@@ -66,10 +67,10 @@ class GipGame:
         returns bool to indicate
         """
         player_input = ""
-        while player_input not in ["y", "n"]: # list of legal characters
-            player_input = input("Roll Again Y/N\n: ").lower() # request input
-        
-        return True if player_input == "y" else False # return true if the player wants to roll again
+        while player_input not in ["y", "n"]:  # list of legal characters
+            player_input = input("Roll Again Y/N\n: ").lower()  # request input
+
+        return True if player_input == "y" else False  # return true if the player wants to roll again
 
     def player_roll(self):
         """
@@ -82,13 +83,14 @@ class GipGame:
         print(f"you rolled a {dice_value}")
         if self.is_bust(dice_value):
             print("You hit a 1 unlucky round score 0")
+            self.reset_round_score()
             return False
         else:
             self.round_score += dice_value
             print(f"now your score for this round is {self.round_score}")
             return True
-            
-    def round(self):
+
+    def play_round(self):
         """
         handles the basic flow of each round
         and returns the score for that round
@@ -102,22 +104,21 @@ class GipGame:
                         return self.round_score
                 else:
                     return self.round_score
-    
+        else:
+            return self.round_score
+
     def main_loop(self):
         self.reset()
         player_turn = randint(0, 1)
-        
-        print(f"______________{self.players[player_turn].get_name()}'s Turn______________")
-        self.players[player_turn].add_score(self.round())
-        self.reset_round_score()
-        print(f"______________{self.players[player_turn].get_name()}'s Score is {self.players[player_turn]._score}")
-        
+        current_player = self.players[player_turn]
+
         while not self.is_winner():
             player_turn = abs(player_turn - 1)
-            print(f"______________{self.players[player_turn].get_name()}'s Turn______________")
-            self.players[player_turn].add_score(self.round())
+            current_player = self.players[player_turn]
+            print(f"______________{current_player.get_name()}'s Turn______________")
+            self.players[player_turn].add_score(self.play_round())
             self.reset_round_score()
-            print(f"______________{self.players[player_turn].get_name()}'s Score is {self.players[player_turn]._score}")
+            print(f"______________{current_player.get_name()}'s Score is {current_player.get_score()}")
 
 
 game = GipGame()
