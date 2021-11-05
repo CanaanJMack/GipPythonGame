@@ -1,4 +1,5 @@
 from time import sleep
+from PodSixNet.Channel import Channel
 from PodSixNet.Connection import ConnectionListener, connection
 
 
@@ -10,6 +11,7 @@ class MyNetworkListener(ConnectionListener):
     # is this clients turn.
     turn = True
 
+
     def __init__(self):
         """
         when there is a new isntance of this class,
@@ -19,6 +21,7 @@ class MyNetworkListener(ConnectionListener):
         self.Conn()
         self.Update()
 
+
     def Update(self):
         """
         This function updates the data from the server.
@@ -26,15 +29,6 @@ class MyNetworkListener(ConnectionListener):
         connection.Pump()
         self.Pump()
 
-    def inputMsg(self):
-        """
-        Get a message from the user and send it to the 
-        server along with this clients id.
-
-        it is no longer this clients turn to speak.
-        """
-        self.turn = False
-        self.Send({"action": "sendMessage", "ID": (self.id), "message": (input(f"Client: {myClient.id}: "))})
 
     def Network_serverFull(self, data):
         """
@@ -50,15 +44,43 @@ class MyNetworkListener(ConnectionListener):
 
         quit()
 
-    def Network_print(self, data):
+
+    def Network_getInput(self, data):
         """
-        When this client recieves a messag, it is now
-        this clients turn to speak, and print the
-        information along with the sender.
+        This function retrieves info from the user and
+        sends it to the server.
         """
 
-        self.turn = True if data["sender"] != "Server" else False
-        print(f"{data['sender']}: {data['message']}")
+        playerInput = ""
+
+        if data["type"] == "y/n":
+
+            while playerInput not in ["y", "n"]:
+                playerInput = (input("Roll Again? Y/N\n: ")).lower()
+
+
+        elif data["type"] == "name":
+
+            playerInput = input("Username?\n: ")
+
+
+        elif data["type"] == "replay":
+
+            while playerInput not in ["y", "n"]:
+                playerInput = (input("Play Again? Y/N\n: ")).lower()
+
+
+        connection.Send({"action": "retrieveInput", "playerInput": f"{playerInput}"})
+
+
+    def Network_print(self, data):
+        """
+        When this function is called by the server.
+        print a message.
+        """
+        
+        print(f"{data['message']}")
+
 
     def Network_setID(self, data):
         """
@@ -69,6 +91,7 @@ class MyNetworkListener(ConnectionListener):
         self.id = data["value"]
         if data["value"] == 1:
             self.turn = False
+
 
     def Conn(self):
         """
@@ -112,9 +135,5 @@ while True:
     # while the clients id is still default.
     # or if it is not this clients turn.
     # update the server data and wait.
-    while myClient.id == 0 or not myClient.turn:
         myClient.Update()
         sleep(0.1)
-
-    # send a message from this client to the server.
-    myClient.inputMsg()
