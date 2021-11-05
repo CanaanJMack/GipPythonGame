@@ -238,6 +238,7 @@ class MyServer(Server):
         player_turn = randint(0, 1)
         print(player_turn)
         current_player = self.players[player_turn]
+        player_input = ""
 
         while not self.is_winner():
             player_turn = abs(player_turn - 1)
@@ -254,7 +255,10 @@ class MyServer(Server):
         clients[0].Send({"action": "print", "ID": "server", "message": f"{self.players[abs(player_turn - 1)].get_name()} had a score of {self.players[abs(player_turn - 1)].get_score()}"})
         clients[1].Send({"action": "print", "ID": "server", "message": f"{self.players[abs(player_turn - 1)].get_name()} had a score of {self.players[abs(player_turn - 1)].get_score()}"})
 
-        quit()
+
+        while player_input not in ["y", "n"]:
+            player_input = self.getInput(player_turn, "replay")
+        self.play_again() if player_input == "y" else quit()
 
 
 

@@ -58,8 +58,17 @@ class MyNetworkListener(ConnectionListener):
             while playerInput not in ["y", "n"]:
                 playerInput = (input("Roll Again? Y/N\n: ")).lower()
 
+
         elif data["type"] == "name":
+
             playerInput = input("Username?\n: ")
+
+
+        elif data["type"] == "replay":
+
+            while playerInput not in ["y", "n"]:
+                playerInput = (input("Play Again? Y/N\n: ")).lower()
+
 
         connection.Send({"action": "retrieveInput", "playerInput": f"{playerInput}"})
 
