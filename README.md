@@ -5,4 +5,9 @@ Gip is a two player game of chance, each player rolls a die and if the number is
 <h2>enter this into your command prompt "pip install PodSixNet"</h2>
 <br>
 
-To Play multiplayer gip, first start the server.py file, then enter the host and port you wish to use seperated by a ":" (If you dont enter a server address it will default to LocalHost:8000). Then start two instances of the client.py file and enter the same address, now both players can enter their names and play!
+For ease of use we recommend using a VPN software for both users, such as Hamachi.
+
+To Play multiplayer gip, One user must run an instance of the server file, and both users must run an instance of the client file. the seerver file will ask for the ip and port to use for the game to be hosted on, pressing enter without inputting a custom ip or port will start the server on the local host and with a default port of 8000.
+Both clients will need to use the ip and port that the serve is running on when prompted so that they can connect.
+
+If your client does not connect to the server that is being run by another user you may need to port forward or alternatively make use of a vpn software such as Hamachi which will have you both on the same virtual lan network, skipping the need to port forward and should allow for a connection to be made easily.
