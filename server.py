@@ -133,6 +133,11 @@ class MyServer(Server):
             self.players[player] = Player()  #re create the players
             self.players[player].set_name(self.getInput(player, "name"))
 
+            if player:
+                while self.players[player].get_name() == self.players[0].get_name():
+                    clients[player].Send({"action" : "print", "message" : "-----Name already taken-----"})
+                    self.players[player].set_name(self.getInput(player, "name"))
+
         self.reset_round_score()
 
     def play_again(self):
