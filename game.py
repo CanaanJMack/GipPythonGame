@@ -9,13 +9,13 @@ class GipGame:
         self.players = [Player(), Player()]  # list of players
         self.dice = Dice()  # create a dice object
         self.round_score = 0  # declaring round score variable
-        self.first_game = True
+        self.first_game = True  # Value for new_players() functionality
 
     def new_players(self):
         for player in range(len(self.players)):  # loop through the players
             self.players[player] = Player()  # re create the players
             self.players[player].set_name(input(f"Player {player + 1} name \n: ").capitalize())
-        self.first_game = False
+        self.first_game = False  # Sets the value to False
 
     def play_again(self):
         """
@@ -26,11 +26,11 @@ class GipGame:
 
         self.reset_round_score()
 
-        player_input = input("Same players? Y/N\n: ").lower()
+        player_input = input("Same players? Y/N\n: ").lower()  # Asks if same players
         if player_input == "y":
-            self.main_loop()
+            self.main_loop()  # Restarts the game with same players as 'first_game' is now set to False
         elif player_input == "n":
-            self.new_players()
+            self.new_players()  # Restarts the game but triggers new_players function for new player names
 
         self.main_loop()
 
@@ -111,7 +111,7 @@ class GipGame:
 
     def main_loop(self):
         if self.first_game is True:
-            self.new_players()
+            self.new_players()  # First game always requests new players by default
         player_turn = randint(0, 1)
         current_player = self.players[player_turn]
         player_input = ""
@@ -125,12 +125,11 @@ class GipGame:
             print(f"______________{current_player.get_name()}'s Score is {current_player.get_score()}")
 
         print(f"THE WINNER IS {current_player.get_name().upper()}!!! WITH A SCORE OF {current_player.get_score()}")
-        print(
-            f"{self.players[abs(player_turn - 1)].get_name()} had a score of {self.players[abs(player_turn - 1)].get_score()}")
+        print(f"{self.players[abs(player_turn - 1)].get_name()} had a score of {self.players[abs(player_turn - 1)].get_score()}")
 
         while player_input not in ["y", "n"]:
             player_input = input("Play again? Y/N\n: ").lower()
-        self.play_again() if player_input == "y" else quit()
+        self.play_again() if player_input == "y" else quit()  # If new game, triggers function, otherwise quits program
 
 
 game = GipGame()
