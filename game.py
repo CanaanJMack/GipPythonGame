@@ -9,28 +9,28 @@ class GipGame:
         self.players = [Player(), Player()]  # list of players
         self.dice = Dice()  # create a dice object
         self.round_score = 0  # declaring round score variable
+        self.first_game = True  # Value for new_players() functionality
 
-    def reset(self):
-        """
-        Recreates all the players in the game,
-        resets the rounds score and requests
-        names for the new players
-        """
+    def new_players(self):
         for player in range(len(self.players)):  # loop through the players
             self.players[player] = Player()  # re create the players
-            self.players[player].set_name(input(f"Player {player+1} name \n: ").capitalize())
-            
-        self.reset_round_score()
+            self.players[player].set_name(input(f"Player {player + 1} name \n: ").capitalize())
+        self.first_game = False  # Sets the value to False
 
     def play_again(self):
         """
-        resets the scores of every player
-        and the rounds score
+        Resets the scores of both players and the rounds score, asks if same players or new players.
         """
         for player in range(len(self.players)):  # loop through the players
             self.players[player].reset_score()  # set the players score to 0
 
         self.reset_round_score()
+
+        player_input = input("Same players? Y/N\n: ").lower()  # Asks if same players
+        if player_input == "y":
+            self.main_loop()  # Restarts the game with same players as 'first_game' is now set to False
+        elif player_input == "n":
+            self.new_players()  # Restarts the game but triggers new_players function for new player names
 
         self.main_loop()
 
@@ -110,7 +110,8 @@ class GipGame:
             return self.round_score
 
     def main_loop(self):
-        self.reset()
+        if self.first_game is True:
+            self.new_players()  # First game always requests new players by default
         player_turn = randint(0, 1)
         current_player = self.players[player_turn]
         player_input = ""
@@ -128,7 +129,8 @@ class GipGame:
 
         while player_input not in ["y", "n"]:
             player_input = input("Play again? Y/N\n: ").lower()
-        self.play_again() if player_input == "y" else quit()
+        self.play_again() if player_input == "y" else quit()  # If new game, triggers function, otherwise quits program
+
 
 game = GipGame()
 game.main_loop()
