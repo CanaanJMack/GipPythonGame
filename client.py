@@ -58,7 +58,7 @@ class MyNetworkListener(ConnectionListener):
         """
 
         self.turn = True if data["sender"] != "Server" else False
-        print(f"{data['sender']}: {data['message']}")
+        print(f"{data['message']}")
 
     def Network_setID(self, data):
         """
